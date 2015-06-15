@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -34,21 +35,8 @@ public class ForecastFragment extends Fragment {
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // inflater.inflate(R.menu.forecastfragment, menu);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Set some test data
-        String[] forcastArray = {"Test 1", "Test 2"};
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.e("PlaceholderFragment", "Item Selected");
 
         URL zURL = null;
         try {
@@ -58,6 +46,31 @@ public class ForecastFragment extends Fragment {
         }
         String zJSON = null;
         new FetchWeatherTask().execute(zURL);
+
+        return true;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // inflater.inflate(R.menu.forecastfragment, menu);
+
+
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Set some test data
+        String[] forcastArray = {"Test 1", "Test 2"};
+
+
 
         // Convert array to string list.
         List<String> weekForecase = new ArrayList<String>(Arrays.asList(forcastArray));
@@ -104,6 +117,8 @@ public class ForecastFragment extends Fragment {
                 // http://openweathermap.org/API#forecast
                 URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
 
+                Log.e("PlaceholderFragment", "Before Connect");
+
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -136,6 +151,7 @@ public class ForecastFragment extends Fragment {
                 }
                 forecastJsonStr = buffer.toString();
                 Log.e("PlaceholderFragment", "Done HTTP Call");
+                Log.v("PlaceholderFragment", forecastJsonStr);
             } catch (IOException e) {
                 Log.e("PlaceholderFragment", "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
